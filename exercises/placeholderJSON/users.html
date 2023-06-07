@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+  </head>
+  <body>
+    <header>
+      <header>
+        <a href="index.html">Home</a>
+        <a href="todo.html">To-Dos</a>
+        <a href="users.html">Users</a>
+      </header>
+    </header>
+    <main>
+      <h1>Users</h1>
+
+      <table id="users-tbl">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Street</th>
+            <th>Suite</th>
+            <th>ZIP</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbl-body"></tbody>
+      </table>
+    </main>
+    <script>
+      "use strict";
+
+      const userTableBody = document.querySelector("#users-tbl-body");
+
+      function buildUserRow(user) {
+        let row = userTableBody.insertRow(-1);
+
+        row.insertCell(0).innerText = user.name;
+        row.insertCell(1).innerText = user.username;
+        row.insertCell(2).innerText = user.email;
+        row.insertCell(3).innerText = user.address.street;
+        row.insertCell(4).innerText = user.address.suite;
+        row.insertCell(5).innerText = user.address.zipcode;
+
+        userTableBody.appendChild(row);
+      }
+
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json())
+        .then((users) => users.forEach(buildUserRow));
+    </script>
+  </body>
+</html>

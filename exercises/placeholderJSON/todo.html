@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+  </head>
+  <body>
+    <header>
+        <a href="index.html">Home</a>
+        <a href="todo.html">To-Dos</a>
+        <a href="users.html">Users</a>
+      </header> 
+    <main>
+      <h1>To-Dos</h1>
+      <input type="number" id="input-ToDo" name="input-ToDo" placeholder="Enter To-Do" onchange="findToDo();">
+      <button onclick="findToDo();">Get</button>
+      <div id="toDo-details"></div>
+    </main>
+    <script>
+        "use strict";
+
+        const inputToDo = document.querySelector("#input-ToDo");
+        const button = document.querySelector("button");
+        const toDoDetails = document.querySelector("#toDo-details");
+        
+        function findToDo() {
+            console.log(inputToDo.value);
+            
+            fetch(`https://jsonplaceholder.typicode.com/todos/${inputToDo.value}`)
+            .then((data) => data.json())
+            .then((content) => {
+                //console.log(content);
+                toDoDetails.innerText = `
+                You've entered: ${inputToDo.value}. 
+                Here's what we found!
+                =====================
+                ID: ${content.id}
+                Title: ${content.title}
+                Completed: ${content.completed}`
+            });
+        }
+    </script>
+  </body>
+</html>
