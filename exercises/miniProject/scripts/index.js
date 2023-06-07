@@ -12,8 +12,13 @@ function buildWeatherRow(forecastInfo) {
   row.insertCell(0).innerText = forecastInfo.name;
   row.insertCell(1).innerText = `${forecastInfo.temperature} ${forecastInfo.temperatureUnit}`;
   row.insertCell(2).innerText = `${forecastInfo.windSpeed} ${forecastInfo.windDirection}`;
-  row.insertCell(3).innerText = forecastInfo.shortForecast;
-  row.insertCell(4).innerText = forecastInfo.detailedForecast;
+  if (!forecastInfo.probabilityOfPrecipitation.value) {
+    row.insertCell(3).innerText = `0%`;
+  } else {
+      row.insertCell(3).innerText = `${forecastInfo.probabilityOfPrecipitation.value}%`;
+  }
+  row.insertCell(4).innerText = forecastInfo.shortForecast;
+  row.insertCell(5).innerText = forecastInfo.detailedForecast;
 
   cityWeatherTblBody.appendChild(row);
 }
