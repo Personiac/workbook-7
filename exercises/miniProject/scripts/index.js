@@ -2,18 +2,18 @@
 
 const cityWeatherTblBody = document.querySelector("#weather-tbl-body");
 const cityDDL = document.querySelector("#city-DDL");
+let cityWeatherURL;
 
-function buildWeatherRow(cityInfo, lat, long) {
+function buildWeatherRow(forecastInfo) {
   let row = cityWeatherTblBody.insertRow(-1);
 
-  console.log(cityInfo);
+  console.log(forecastInfo);
 
-  row.insertCell(0).innerText = cityInfo.properties.relativeLocation.properties.city;
-  row.insertCell(1).innerText = cityInfo.properties.relativeLocation.properties.state;
-  row.insertCell(2).innerText = lat;
-  row.insertCell(3).innerText = long;
-//   row.insertCell(4).innerText = cityInfo.population;
-//   row.insertCell(5).innerText = cityInfo.weather;
+  row.insertCell(0).innerText = forecastInfo.name;
+  row.insertCell(1).innerText = `${forecastInfo.temperature} ${forecastInfo.temperatureUnit}`;
+  row.insertCell(2).innerText = `${forecastInfo.windSpeed} ${forecastInfo.windDirection}`;
+  row.insertCell(3).innerText = forecastInfo.shortForecast;
+  row.insertCell(4).innerText = forecastInfo.detailedForecast;
 
   cityWeatherTblBody.appendChild(row);
 }
@@ -25,8 +25,8 @@ function loadCityDDL() {
   selectOption.value = " ";
   selectOption.textContent = "Select City...";
   cityDDL.appendChild(selectOption);
-  
-  cities.sort((a,b) => a.city.localeCompare(b.city));
+
+  cities.sort((a, b) => a.city.localeCompare(b.city));
 
   for (const cityProfile of cities) {
     let option = new Option(cityProfile.city, count);
@@ -37,8 +37,8 @@ function loadCityDDL() {
 
 loadCityDDL();
 
-function displayCityDetails(cityIndex) {
-  clearTable();
+
+function fetchCityDetails(cityIndex) {
   let cityInfo = cities.find(function (city, index) {
     return cityIndex == index;
   });
@@ -46,16 +46,31 @@ function displayCityDetails(cityIndex) {
   let cityLat = cityInfo.latitude;
   let cityLong = cityInfo.longitude;
 
-  console.log(`City: ${cityInfo.city}, Lat: ${cityLat}, Long: ${cityLong}`);
-  open(`https://api.weather.gov/points/${cityLat},${cityLong}`);
   fetch(`https://api.weather.gov/points/${cityLat},${cityLong}`)
     .then((cityDetails) => cityDetails.json())
     .then((content) => {
       return content;
     })
     .then((info) => {
-      buildWeatherRow(info, cityLat, cityLong);
+      cityWeatherURL = info.properties.forecast;
+      console.log(cityWeatherURL);
+      fetchForecastDetails(cityWeatherURL);
     });
+}
+
+function loadDetails(filteredList) {
+    clearTable();
+    for (const city of filteredList) {
+        buildWeatherRow(city);
+    }
+}
+
+function fetchForecastDetails(url) {
+    fetch(url)
+    .then((weatherDetails) => weatherDetails.json())
+    .then((content) => {
+        loadDetails(content.properties.periods);
+    })
 }
 
 function clearTable() {

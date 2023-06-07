@@ -10,16 +10,15 @@
   <body>
     <header></header>
     <main>
-      <select name="city-DDL" id="city-DDL" onchange="displayCityDetails(this.value);"></select>
+      <select name="city-DDL" id="city-DDL" onchange="fetchCityDetails(this.value);"></select>
       <table id="weather-tbl">
         <thead>
           <tr>
-            <th>City</th>
-            <th>State</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Population</th>
-            <th>Weather</th>
+            <th>Time</th>
+            <th>Temperature</th>
+            <th>Wind Speed</th>
+            <th>Short Forecast</th>
+            <th>Detailed Forecast</th>
           </tr>
         </thead>
         <tbody id="weather-tbl-body"></tbody>
